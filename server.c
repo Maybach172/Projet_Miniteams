@@ -44,7 +44,7 @@ void parser(int len)
 	printf("%s \n", message);
 
 	// Open and write log file in append mode
-    int logFile = open("logs", O_WRONLY | O_APPEND | O_CREAT, 0644);
+    int logFile = open("conversations.log", O_WRONLY | O_APPEND | O_CREAT, 0644);
     if (logFile == -1)
     {
         perror("Could not open log file");
