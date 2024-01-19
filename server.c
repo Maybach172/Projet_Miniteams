@@ -10,8 +10,7 @@ void startup()
 	printf("Miniteams starting...\n");
 	printf("My PID is %i\n", getpid());
 	printf("Waiting for new messages\n");
-	buffer = malloc(1001 * sizeof *buffer);
-	buffer[1000] = -1;
+	buffer = malloc(1010 * sizeof *buffer);
 }
 
 void parser(int len)
@@ -33,7 +32,7 @@ void sig_handler(int sig, siginfo_t* info, void* vp)
 	int character = info->si_value.sival_int;
 
 	*buffer = character;
-	
+
 	if (*buffer == '\0')
 	{
 		int len = *(buffer - 1);
