@@ -8,15 +8,18 @@
 
 void parser(int *parsed_message, char *message, int len)
 {
-	for (int i = 0; i < len; i++)
+	//copy message in an integer array
+	for (int i = 0; i < len; i++)	
 	{
 		parsed_message[i] = message[i];
 	}
+	//add message length and null character for message end detection
 	parsed_message[len] = len;
 	parsed_message[len + 1] = '\0';
 
 }
 
+//check the number of arguments
 int arg_check(int argc)
 {
 	return argc == 3;
@@ -30,11 +33,9 @@ int main(int argc, char const *argv[])
 		return 0;
 	}
 
-	int len = strlen(argv[2]);
+	int len = strlen(argv[2]);						//message length
 
-	printf("%i\n", len);
-
-	char message[len];
+	char message[len];								//initialize buffer for message argument
 	
 	if (len > 1000)
 	{
@@ -43,32 +44,32 @@ int main(int argc, char const *argv[])
     }
     else
     {
-    	strcpy(message, argv[2]);
+    	strcpy(message, argv[2]);					//copy argument into buffer
 
-		int new_message[len + 2];
+		int new_message[len + 2];					//initialize integer buffer in order to send message
 	
 		parser(new_message, message, len);
 	
-		for (int i = 0; i < len + 2; i++)
+		for (int i = 0; i < len + 2; i++)			//send message
 		{
-			union sigval value;
+			union sigval value;						//initialize structure containing character value
 			
-			int pid = atoi(argv[1]);
+			int pid = atoi(argv[1]);				//get pid passed as an argument
 
-			if (!isascii(new_message[i]))
+			if (!isascii(new_message[i]))			//check if character is ASCII or not
 			{
 				perror("one of the character after is not an ASCII character\n");
 				break;
 			}
 
-			value.sival_int = new_message[i];
+			value.sival_int = new_message[i];		
 
-			if(sigqueue(pid, SIGUSR1, value) != 0)
+			if(sigqueue(pid, SIGUSR1, value) != 0)	//send character ASCII value
 			{
 				perror("message could not be send\n");
 				break;
 			}
-			sleep(0.01);
+			sleep(0.01);							//wait to allow server to correctly receive the signal
 		}
 	}
 
