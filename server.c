@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 int *buffer;
 
@@ -25,6 +26,16 @@ void parser(int len)
 	message[len] = '\0';
 
 	printf("%s \n", message);
+
+	// Open and write log file in append mode
+    int logFile = open("chat.log", O_WRONLY | O_APPEND | O_CREAT, 0644);
+    if (logFile == -1)
+    {
+        perror("Could not open log file");
+        exit(1);
+    }
+
+	write(logFile, message, len);
 }
 
 void sig_handler(int sig, siginfo_t* info, void* vp)

@@ -57,15 +57,15 @@ int main(int argc, char const *argv[])
 
 			if (!isascii(new_message[i]))
 			{
-				fprintf(stderr, "the character after %c is not an ASCII character\n", new_message[i-1]);
+				perror("one of the character after is not an ASCII character\n");
 				break;
 			}
 
 			value.sival_int = new_message[i];
-			
+
 			if(sigqueue(pid, SIGUSR1, value) != 0)
 			{
-				fprintf(stderr, "message could not be send\n");
+				perror("message could not be send\n");
 				break;
 			}
 			sleep(0.01);
